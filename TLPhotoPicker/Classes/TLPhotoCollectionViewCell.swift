@@ -118,6 +118,10 @@ open class TLPhotoCollectionViewCell: UICollectionViewCell {
         }
     }
     
+    @objc open func didSetImage(image: UIImage) {
+        
+    }
+    
     @objc open func selectedCell() {
         
     }

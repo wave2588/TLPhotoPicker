@@ -12,6 +12,8 @@ import PhotosUI
 
 class CustomCell_Instagram: TLPhotoCollectionViewCell {
     
+    @IBOutlet var requiedSizeLabel: UILabel!
+    
     let selectedColor = UIColor(red: 88/255, green: 144/255, blue: 255/255, alpha: 1.0)
     
     override var duration: TimeInterval? {
@@ -35,9 +37,16 @@ class CustomCell_Instagram: TLPhotoCollectionViewCell {
         }
     }
     
+    override func didSetImage(image: UIImage) {
+        super.didSetImage(image: image)
+        self.requiedSizeLabel.isHidden = (image.size.width < 100 && image.size.height < 100)
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.durationView?.backgroundColor = UIColor.clear
+        self.requiedSizeLabel.isHidden = true
+        self.requiedSizeLabel.text = "100\nx\n100"
         self.orderLabel?.clipsToBounds = true
         self.orderLabel?.layer.cornerRadius = 10
         self.orderLabel?.layer.borderWidth = 1
