@@ -118,7 +118,7 @@ open class TLPhotoCollectionViewCell: UICollectionViewCell {
         }
     }
     
-    @objc open func didSetImage(image: UIImage) {
+    @objc open func update(with phAsset: PHAsset) {
         
     }
     

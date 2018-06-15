@@ -37,9 +37,9 @@ class CustomCell_Instagram: TLPhotoCollectionViewCell {
         }
     }
     
-    override func didSetImage(image: UIImage) {
-        super.didSetImage(image: image)
-        self.requiredSizeLabel.isHidden = (image.size.width < 100 && image.size.height < 100)
+    override func update(with phAsset: PHAsset) {
+        super.update(with: phAsset)
+        self.requiredSizeLabel.isHidden = (phAsset.pixelHeight <= 100 && phAsset.pixelWidth <= 100)
     }
     
     override func awakeFromNib() {
