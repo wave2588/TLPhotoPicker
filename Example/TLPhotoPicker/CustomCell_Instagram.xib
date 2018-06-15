@@ -99,7 +99,7 @@
                 <outlet property="imageView" destination="rOH-JI-pE1" id="tgu-TV-hTi"/>
                 <outlet property="indicator" destination="1Zf-X9-xCZ" id="b7n-5J-KNK"/>
                 <outlet property="orderLabel" destination="JhX-P9-VnM" id="Oev-lS-XRO"/>
-                <outlet property="requiedSizeLabel" destination="XY2-dv-cdr" id="O2q-Fe-Nqv"/>
+                <outlet property="requiredSizeLabel" destination="XY2-dv-cdr" id="epJ-rs-J8g"/>
             </connections>
             <point key="canvasLocation" x="32" y="-10"/>
         </collectionViewCell>
