@@ -16,6 +16,7 @@ public protocol TLPhotosPickerViewControllerDelegate: class {
     func dismissPhotoPicker(withTLPHAssets: [TLPHAsset])
     func dismissComplete()
     func photoPickerDidCancel()
+    func shouldSelectedCell(phAsset: PHAsset) -> Bool
     func didExceedMaximumNumberOfSelection(picker: TLPhotosPickerViewController)
     func handleNoAlbumPermissions(picker: TLPhotosPickerViewController)
     func handleNoCameraPermissions(picker: TLPhotosPickerViewController)
@@ -27,6 +28,7 @@ extension TLPhotosPickerViewControllerDelegate {
     public func dismissPhotoPicker(withTLPHAssets: [TLPHAsset]) { }
     public func dismissComplete() { }
     public func photoPickerDidCancel() { }
+    public func shouldSelectedCell(phAsset: PHAsset) -> Bool { return true }
     public func didExceedMaximumNumberOfSelection(picker: TLPhotosPickerViewController) { }
     public func handleNoAlbumPermissions(picker: TLPhotosPickerViewController) { }
     public func handleNoCameraPermissions(picker: TLPhotosPickerViewController) { }
@@ -140,6 +142,7 @@ open class TLPhotosPickerViewController: UIViewController {
             self.configure.allowedLivePhotos = newValue
         }
     }
+    @objc open var shouldSelectedCell: ((PHAsset) -> Bool)? = nil
     @objc open var didExceedMaximumNumberOfSelection: ((TLPhotosPickerViewController) -> Void)? = nil
     @objc open var handleNoAlbumPermissions: ((TLPhotosPickerViewController) -> Void)? = nil
     @objc open var handleNoCameraPermissions: ((TLPhotosPickerViewController) -> Void)? = nil
@@ -404,6 +407,16 @@ extension TLPhotosPickerViewController {
             self?.dismissCompletion?()
         }
     }
+    
+    fileprivate func isAvailableSelectedAsset(phAsset: PHAsset) -> Bool {
+        if let closure = self.shouldSelectedCell {
+            return closure(phAsset)
+        }else if let delegate = self.delegate {
+            return delegate.shouldSelectedCell(phAsset: phAsset)
+        }
+        return true
+    }
+    
     fileprivate func maxCheck() -> Bool {
         if self.configure.singleSelectedMode {
             self.selectedAssets.removeAll()
@@ -730,7 +743,7 @@ extension TLPhotosPickerViewController: UICollectionViewDelegate,UICollectionVie
                 return
             }
         }
-        guard var asset = collection.getTLAsset(at: indexPath.row) else { return }
+        guard var asset = collection.getTLAsset(at: indexPath.row), let phAsset = asset.phAsset else { return }
         cell.popScaleAnim()
         if let index = self.selectedAssets.index(where: { $0.phAsset == asset.phAsset }) {
         //deselect
@@ -759,6 +772,7 @@ extension TLPhotosPickerViewController: UICollectionViewDelegate,UICollectionVie
         //select
             self.logDelegate?.selectedPhoto(picker: self, at: indexPath.row)
             guard !maxCheck() else { return }
+            guard isAvailableSelectedAsset(phAsset: phAsset) else { return }
             asset.selectedOrder = self.selectedAssets.count + 1
             self.selectedAssets.append(asset)
             cell.selectedAsset = true

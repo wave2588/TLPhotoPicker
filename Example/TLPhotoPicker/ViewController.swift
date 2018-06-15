@@ -53,6 +53,13 @@ class ViewController: UIViewController,TLPhotosPickerViewControllerDelegate {
         viewController.didExceedMaximumNumberOfSelection = { [weak self] (picker) in
             self?.showExceededMaximumAlert(vc: picker)
         }
+        viewController.shouldSelectedCell = { [weak self] asset -> Bool in
+            if asset.pixelHeight > 100 || asset.pixelWidth > 100 {
+                self?.showUnsatisifiedSizeAlert(vc: viewController)
+                return false
+            }
+            return true
+        }
         var configure = TLPhotosPickerConfigure()
         configure.numberOfColumn = 3
         configure.nibSet = (nibName: "CustomCell_Instagram", bundle: Bundle.main) // If you want use your custom cell..
@@ -156,6 +163,12 @@ class ViewController: UIViewController,TLPhotosPickerViewControllerDelegate {
 
     func showExceededMaximumAlert(vc: UIViewController) {
         let alert = UIAlertController(title: "", message: "Exceed Maximum Number Of Selection", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+        vc.present(alert, animated: true, completion: nil)
+    }
+    
+    func showUnsatisifiedSizeAlert(vc: UIViewController) {
+        let alert = UIAlertController(title: "Oups!", message: "The required size is: 100 x 100", preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
         vc.present(alert, animated: true, completion: nil)
     }
