@@ -152,7 +152,8 @@ open class TLPhotosPickerViewController: UIViewController {
     fileprivate var completionWithTLPHAssets: (([TLPHAsset]) -> Void)? = nil
     fileprivate var didCancel: (() -> Void)? = nil
     
-    fileprivate var collections = [TLAssetsCollection]()
+    /// temp
+    var collections = [TLAssetsCollection]()
     fileprivate var focusedCollection: TLAssetsCollection? = nil
     fileprivate var requestIds = [IndexPath:PHImageRequestID]()
     fileprivate var playRequestId: (indexPath: IndexPath, requestId: PHImageRequestID)? = nil
